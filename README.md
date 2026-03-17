@@ -6,6 +6,10 @@ Desktop apartment-search agent for Bangkok rentals, built to monitor Thai listin
 
 The current implementation is centered on `PropertyHub`, because its pages expose a structured Next.js payload that is much more reliable than brittle HTML scraping alone. Results are stored locally in SQLite, surfaced through a Tkinter desktop app, and enriched with agent contact details, match scoring, contact-tracking state, and draft emails.
 
+## App Screenshot
+
+![Desktop app screenshot](docs/app-overview.png)
+
 ## What This App Does
 
 - Pulls apartment listings from configured Thai rental search pages
@@ -271,6 +275,10 @@ This makes it possible to filter for listings you still need to contact and avoi
 - Some sites redirect or expose inconsistent fields, so future adapters will still need site-specific handling.
 - This is a local desktop tool, not a hosted SaaS product.
 - Email sending is not automatic; the current flow is review-first and manual-send by design.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ## Testing
 
