@@ -6,6 +6,10 @@ Desktop apartment-search agent for Bangkok rentals, built to monitor Thai listin
 
 The current implementation is centered on `PropertyHub`, because its pages expose a structured Next.js payload that is much more reliable than brittle HTML scraping alone. Results are stored locally in SQLite, surfaced through a Tkinter desktop app, and enriched with agent contact details, match scoring, contact-tracking state, and draft emails.
 
+## App Demo
+
+![Desktop app demo](docs/app-demo.gif)
+
 ## App Screenshot
 
 ![Desktop app screenshot](docs/app-overview.png)
@@ -285,6 +289,12 @@ MIT. See [LICENSE](LICENSE).
 ```powershell
 python -m unittest discover -s tests -v
 python -m compileall apartment_agent tests
+```
+
+## Regenerating the Demo GIF
+
+```powershell
+python scripts/render_demo_gif.py
 ```
 
 ## Repo Summary

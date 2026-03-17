@@ -145,36 +145,36 @@ class ApartmentAgentApp(tk.Tk):
         ttk.Button(actions, text="Copy Email", command=self.copy_email).pack(side="left", padx=(8, 0))
         ttk.Button(actions, text="Copy Agent Info", command=self.copy_agent_info).pack(side="left", padx=(8, 0))
 
-        notebook = ttk.Notebook(right)
-        notebook.pack(fill="both", expand=True)
+        self.notebook = ttk.Notebook(right)
+        self.notebook.pack(fill="both", expand=True)
 
-        details_tab = ttk.Frame(notebook, padding=10)
-        email_tab = ttk.Frame(notebook, padding=10)
-        notebook.add(details_tab, text="Details")
-        notebook.add(email_tab, text="Email Draft")
+        self.details_tab = ttk.Frame(self.notebook, padding=10)
+        self.email_tab = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(self.details_tab, text="Details")
+        self.notebook.add(self.email_tab, text="Email Draft")
 
-        ttk.Label(details_tab, text="Agent Contact", style="Section.TLabel").pack(anchor="w")
-        self.contact_text = tk.Text(details_tab, height=6, wrap="word")
+        ttk.Label(self.details_tab, text="Agent Contact", style="Section.TLabel").pack(anchor="w")
+        self.contact_text = tk.Text(self.details_tab, height=6, wrap="word")
         self.contact_text.pack(fill="x", pady=(4, 10))
 
-        ttk.Label(details_tab, text="Match Reasons", style="Section.TLabel").pack(anchor="w")
-        self.reasons_text = tk.Text(details_tab, height=6, wrap="word")
+        ttk.Label(self.details_tab, text="Match Reasons", style="Section.TLabel").pack(anchor="w")
+        self.reasons_text = tk.Text(self.details_tab, height=6, wrap="word")
         self.reasons_text.pack(fill="x", pady=(4, 10))
 
-        ttk.Label(details_tab, text="Red Flags", style="Section.TLabel").pack(anchor="w")
-        self.flags_text = tk.Text(details_tab, height=6, wrap="word")
+        ttk.Label(self.details_tab, text="Red Flags", style="Section.TLabel").pack(anchor="w")
+        self.flags_text = tk.Text(self.details_tab, height=6, wrap="word")
         self.flags_text.pack(fill="x", pady=(4, 10))
 
-        ttk.Label(details_tab, text="Listing Summary", style="Section.TLabel").pack(anchor="w")
-        self.summary_text = tk.Text(details_tab, height=14, wrap="word")
+        ttk.Label(self.details_tab, text="Listing Summary", style="Section.TLabel").pack(anchor="w")
+        self.summary_text = tk.Text(self.details_tab, height=14, wrap="word")
         self.summary_text.pack(fill="both", expand=True, pady=(4, 0))
 
-        ttk.Label(email_tab, text="Subject", style="Section.TLabel").pack(anchor="w")
+        ttk.Label(self.email_tab, text="Subject", style="Section.TLabel").pack(anchor="w")
         self.subject_var = tk.StringVar()
-        ttk.Entry(email_tab, textvariable=self.subject_var).pack(fill="x", pady=(4, 10))
+        ttk.Entry(self.email_tab, textvariable=self.subject_var).pack(fill="x", pady=(4, 10))
 
-        ttk.Label(email_tab, text="Body", style="Section.TLabel").pack(anchor="w")
-        self.email_body_text = tk.Text(email_tab, wrap="word")
+        ttk.Label(self.email_tab, text="Body", style="Section.TLabel").pack(anchor="w")
+        self.email_body_text = tk.Text(self.email_tab, wrap="word")
         self.email_body_text.pack(fill="both", expand=True, pady=(4, 0))
 
         for widget in (
