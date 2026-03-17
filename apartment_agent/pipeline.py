@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from apartment_agent.adapters import PropertyHubAdapter
+from apartment_agent.adapters import HipflatAdapter, PropertyHubAdapter
 from apartment_agent.email_drafts import build_email_draft
 from apartment_agent.matching import apply_matching
 from apartment_agent.models import Listing, SearchCriteria, SearchSource
@@ -14,6 +14,7 @@ from apartment_agent.utils import count_non_empty_fields, utc_now_iso
 
 
 ADAPTERS = {
+    "hipflat": HipflatAdapter(),
     "propertyhub": PropertyHubAdapter(),
 }
 
@@ -112,6 +113,9 @@ def _finalize_run(
         if is_new:
             persisted_new += 1
 
+        if listing.not_interested:
+            continue
+
         if listing.fit_label in {"alert", "watch"}:
             draft = build_email_draft(listing, criteria)
             store.store_email_draft(draft)
@@ -159,4 +163,3 @@ def _richness(listing: Listing) -> int:
     if listing.contact_phone or listing.contact_email:
         score += 5
     return score
-

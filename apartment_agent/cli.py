@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import time
 
 from apartment_agent.browser import PlaywrightCapture
@@ -16,7 +17,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "run":
         criteria = load_criteria(args.criteria)
         sources = load_sources(args.sources)
-        browser_capture = _maybe_browser_capture(args)
+        browser_capture = _maybe_browser_capture(args, sources)
         report = run_live(
             criteria=criteria,
             sources=sources,
@@ -43,7 +44,7 @@ def main(argv: list[str] | None = None) -> int:
         while True:
             criteria = load_criteria(args.criteria)
             sources = load_sources(args.sources)
-            browser_capture = _maybe_browser_capture(args)
+            browser_capture = _maybe_browser_capture(args, sources)
             report = run_live(
                 criteria=criteria,
                 sources=sources,
@@ -126,12 +127,16 @@ def _add_common_run_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--wait-seconds", type=float, default=2.0)
 
 
-def _maybe_browser_capture(args: argparse.Namespace) -> PlaywrightCapture | None:
-    if not getattr(args, "capture_conflicts", False):
+def _maybe_browser_capture(args: argparse.Namespace, sources: list | None = None) -> PlaywrightCapture | None:
+    requires_browser = any(getattr(source, "name", "").lower() == "hipflat" for source in (sources or []))
+    if not getattr(args, "capture_conflicts", False) and not requires_browser:
         return None
+    profile_dir = getattr(args, "profile_dir", None) or os.getenv("APARTMENT_AGENT_BROWSER_PROFILE_DIR")
+    env_headful = os.getenv("APARTMENT_AGENT_BROWSER_HEADFUL", "").strip() in {"1", "true", "yes"}
+    headless = not (getattr(args, "headful", False) or env_headful)
     return PlaywrightCapture(
-        headless=not getattr(args, "headful", False),
-        user_data_dir=getattr(args, "profile_dir", None),
+        headless=headless,
+        user_data_dir=profile_dir,
         wait_seconds=getattr(args, "wait_seconds", 2.0),
     )
 

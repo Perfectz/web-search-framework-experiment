@@ -96,6 +96,8 @@ class Listing:
     duplicate_of: str | None = None
     contacted: bool = False
     contacted_at: str | None = None
+    not_interested: bool = False
+    not_interested_at: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

@@ -39,7 +39,7 @@ def main() -> None:
         )
         try:
             app.attributes("-topmost", True)
-            app.geometry("1360x820+30+30")
+            app.geometry("1560x860+30+30")
             app.update()
             time.sleep(0.4)
 

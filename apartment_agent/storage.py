@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS listings (
     listing_date TEXT,
     contacted INTEGER NOT NULL DEFAULT 0,
     contacted_at TEXT,
+    not_interested INTEGER NOT NULL DEFAULT 0,
+    not_interested_at TEXT,
     first_seen_at TEXT NOT NULL,
     last_seen_at TEXT NOT NULL,
     payload_json TEXT NOT NULL
@@ -65,7 +67,11 @@ class ListingStore:
         now = utc_now_iso()
         duplicate_of = self._find_duplicate_of(listing)
         row = self.connection.execute(
-            "SELECT dedupe_key, listing_date, contacted, contacted_at FROM listings WHERE dedupe_key = ?",
+            """
+            SELECT dedupe_key, listing_date, contacted, contacted_at, not_interested, not_interested_at
+            FROM listings
+            WHERE dedupe_key = ?
+            """,
             (listing.dedupe_key,),
         ).fetchone()
 
@@ -79,8 +85,17 @@ class ListingStore:
             elif not listing.contacted and row["contacted_at"]:
                 listing.contacted = True
                 listing.contacted_at = row["contacted_at"]
+            if not listing.not_interested and bool(row["not_interested"]):
+                listing.not_interested = True
+            if listing.not_interested and not listing.not_interested_at:
+                listing.not_interested_at = row["not_interested_at"] or now
+            elif not listing.not_interested and row["not_interested_at"]:
+                listing.not_interested = True
+                listing.not_interested_at = row["not_interested_at"]
         elif listing.contacted and not listing.contacted_at:
             listing.contacted_at = now
+        elif listing.not_interested and not listing.not_interested_at:
+            listing.not_interested_at = now
 
         payload_json = json.dumps(listing.to_dict(), ensure_ascii=False)
         if row:
@@ -89,7 +104,8 @@ class ListingStore:
                 UPDATE listings
                 SET similarity_key = ?, duplicate_of = ?, site_name = ?, listing_id = ?, url = ?, title = ?,
                     project_name = ?, price_baht = ?, fit_label = ?, match_score = ?, source_status = ?,
-                    listing_date = ?, contacted = ?, contacted_at = ?, last_seen_at = ?, payload_json = ?
+                    listing_date = ?, contacted = ?, contacted_at = ?, not_interested = ?, not_interested_at = ?,
+                    last_seen_at = ?, payload_json = ?
                 WHERE dedupe_key = ?
                 """,
                 (
@@ -107,6 +123,8 @@ class ListingStore:
                     listing.listing_date,
                     int(listing.contacted),
                     listing.contacted_at,
+                    int(listing.not_interested),
+                    listing.not_interested_at,
                     now,
                     payload_json,
                     listing.dedupe_key,
@@ -120,9 +138,9 @@ class ListingStore:
             INSERT INTO listings (
                 dedupe_key, similarity_key, duplicate_of, site_name, listing_id, url, title,
                 project_name, price_baht, fit_label, match_score, source_status, listing_date, contacted,
-                contacted_at, first_seen_at,
+                contacted_at, not_interested, not_interested_at, first_seen_at,
                 last_seen_at, payload_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 listing.dedupe_key,
@@ -140,6 +158,8 @@ class ListingStore:
                 listing.listing_date,
                 int(listing.contacted),
                 listing.contacted_at,
+                int(listing.not_interested),
+                listing.not_interested_at,
                 now,
                 now,
                 payload_json,
@@ -160,6 +180,8 @@ class ListingStore:
         search: str = "",
         fit_label: str = "all",
         contacted_filter: str = "all",
+        interest_filter: str = "active",
+        sort_by: str = "best_match",
         limit: int = 250,
     ) -> list[dict]:
         clauses: list[str] = []
@@ -174,6 +196,11 @@ class ListingStore:
         elif contacted_filter == "not_contacted":
             clauses.append("contacted = 0")
 
+        if interest_filter == "active":
+            clauses.append("not_interested = 0")
+        elif interest_filter == "not_interested":
+            clauses.append("not_interested = 1")
+
         if search.strip():
             like = f"%{search.strip()}%"
             clauses.append(
@@ -184,10 +211,21 @@ class ListingStore:
             )
             params.extend([like, like, like, like, like])
 
-        sql = "SELECT dedupe_key, duplicate_of, listing_date, contacted, contacted_at, payload_json FROM listings"
+        order_by = {
+            "best_match": "COALESCE(match_score, 0) DESC, COALESCE(listing_date, last_seen_at) DESC",
+            "newest": "COALESCE(listing_date, last_seen_at) DESC, COALESCE(match_score, 0) DESC",
+            "oldest": "COALESCE(listing_date, first_seen_at) ASC, COALESCE(match_score, 0) DESC",
+            "price_low": "COALESCE(price_baht, 999999999) ASC, COALESCE(match_score, 0) DESC",
+            "price_high": "COALESCE(price_baht, 0) DESC, COALESCE(match_score, 0) DESC",
+        }.get(sort_by, "COALESCE(match_score, 0) DESC, COALESCE(listing_date, last_seen_at) DESC")
+
+        sql = """
+        SELECT dedupe_key, duplicate_of, listing_date, contacted, contacted_at, not_interested, not_interested_at, payload_json
+        FROM listings
+        """
         if clauses:
             sql += " WHERE " + " AND ".join(clauses)
-        sql += " ORDER BY COALESCE(match_score, 0) DESC, COALESCE(listing_date, last_seen_at) DESC LIMIT ?"
+        sql += f" ORDER BY {order_by} LIMIT ?"
         params.append(limit)
 
         rows = self.connection.execute(sql, params).fetchall()
@@ -198,12 +236,18 @@ class ListingStore:
             payload["listing_date"] = row["listing_date"] or payload.get("listing_date")
             payload["contacted"] = bool(row["contacted"])
             payload["contacted_at"] = row["contacted_at"] or payload.get("contacted_at")
+            payload["not_interested"] = bool(row["not_interested"])
+            payload["not_interested_at"] = row["not_interested_at"] or payload.get("not_interested_at")
             results.append(payload)
         return results
 
     def get_listing(self, dedupe_key: str) -> dict | None:
         row = self.connection.execute(
-            "SELECT duplicate_of, listing_date, contacted, contacted_at, payload_json FROM listings WHERE dedupe_key = ?",
+            """
+            SELECT duplicate_of, listing_date, contacted, contacted_at, not_interested, not_interested_at, payload_json
+            FROM listings
+            WHERE dedupe_key = ?
+            """,
             (dedupe_key,),
         ).fetchone()
         if not row:
@@ -213,6 +257,8 @@ class ListingStore:
         payload["listing_date"] = row["listing_date"] or payload.get("listing_date")
         payload["contacted"] = bool(row["contacted"])
         payload["contacted_at"] = row["contacted_at"] or payload.get("contacted_at")
+        payload["not_interested"] = bool(row["not_interested"])
+        payload["not_interested_at"] = row["not_interested_at"] or payload.get("not_interested_at")
         return payload
 
     def get_latest_email_draft(self, dedupe_key: str) -> dict | None:
@@ -255,6 +301,27 @@ class ListingStore:
         self.connection.commit()
         return payload
 
+    def set_not_interested(self, dedupe_key: str, not_interested: bool) -> dict | None:
+        row = self.connection.execute(
+            "SELECT payload_json FROM listings WHERE dedupe_key = ?",
+            (dedupe_key,),
+        ).fetchone()
+        if not row:
+            return None
+
+        payload = json.loads(row["payload_json"])
+        not_interested_at = utc_now_iso() if not_interested else None
+        payload["not_interested"] = not_interested
+        payload["not_interested_at"] = not_interested_at
+        payload_json = json.dumps(payload, ensure_ascii=False)
+
+        self.connection.execute(
+            "UPDATE listings SET not_interested = ?, not_interested_at = ?, payload_json = ? WHERE dedupe_key = ?",
+            (int(not_interested), not_interested_at, payload_json, dedupe_key),
+        )
+        self.connection.commit()
+        return payload
+
     def _ensure_columns(self) -> None:
         existing = {
             row["name"]
@@ -264,6 +331,8 @@ class ListingStore:
             "listing_date": "TEXT",
             "contacted": "INTEGER NOT NULL DEFAULT 0",
             "contacted_at": "TEXT",
+            "not_interested": "INTEGER NOT NULL DEFAULT 0",
+            "not_interested_at": "TEXT",
         }
         for column, definition in required.items():
             if column not in existing:

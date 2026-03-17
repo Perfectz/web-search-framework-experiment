@@ -24,7 +24,9 @@ The current implementation is centered on `PropertyHub`, because its pages expos
 - Generates first-contact outreach emails for real-estate agents
 - Opens Gmail with the draft prefilled, or copies the draft to the clipboard
 - Lets you mark listings as `contacted` or `not contacted`
-- Shows listing date and contact state directly in the desktop UI
+- Lets you hide listings as `not interested` and keep them hidden across future runs
+- Shows listing date, contact state, and hidden-state directly in the desktop UI
+- Sorts results by best match, newest, oldest, and price
 - Writes JSON and Markdown reports for each collection run
 - Optionally captures screenshots with Playwright for manual review
 
@@ -85,7 +87,7 @@ SQLite was added to:
 - keep listing history across runs
 - deduplicate repeated or reposted units
 - store generated drafts
-- preserve `contacted` state even after a fresh search
+- preserve `contacted` and `not interested` state even after a fresh search
 
 ### 4. Site adapter
 
@@ -135,11 +137,14 @@ Implemented:
 - `PropertyHub` zone pages
 - `PropertyHub` project pages
 - `PropertyHub` listing detail pages
+- `Hipflat` browser-backed detail discovery
 - SQLite persistence
 - results viewer desktop app
 - Gmail draft opening
 - contacted tracking
+- persistent not-interested hiding
 - listing date display
+- date-based result sorting
 - optional Playwright screenshot capture
 
 Not implemented yet:
@@ -161,7 +166,7 @@ Not implemented yet:
 - `apartment_agent/matching.py`
   Rules-based scoring and conflict detection
 - `apartment_agent/storage.py`
-  SQLite persistence, draft storage, contacted tracking, and list/query helpers
+  SQLite persistence, draft storage, contact state, hidden-state tracking, and list/query helpers
 - `apartment_agent/email_drafts.py`
   Outreach email generation
 - `apartment_agent/gui.py`
@@ -195,11 +200,16 @@ python -m apartment_agent run --criteria config/criteria.json --sources config/s
 python -m apartment_agent app
 ```
 
-### 4. Optional: capture a page screenshot with Playwright
+### 4. Optional: install the browser runtime used for Hipflat and screenshots
 
 ```powershell
 pip install -r requirements-optional.txt
 playwright install chromium
+```
+
+### 5. Optional: capture a page screenshot with Playwright
+
+```powershell
 python -m apartment_agent capture --url "https://propertyhub.in.th/en/condo-for-rent/mrt-chatuchak-park" --output screenshots/chatuchak-park.png
 ```
 
@@ -210,12 +220,30 @@ Inside the app you can:
 - click `Run Search` to refresh listings
 - use `Filter` to switch between `alert`, `watch`, and `reject`
 - use `Contacted` to show only contacted or uncontacted listings
+- use `Interest` to hide or review listings marked `not interested`
+- use `Sort` to prioritize newest or oldest listings by date
 - search by title, project, URL, site, or listing ID
 - select a result to inspect contact info, match reasons, flags, and summary
 - click `Mark Contacted` once you have reached out
+- click `Hide Listing` once you know a listing is not worth reviewing again
+- click `Restore Listing` to bring a hidden listing back into the active set
 - click `Regenerate Draft` to rebuild the latest email from the current template
 - click `Open Gmail Draft` to open a browser tab with the draft prefilled
 - click `Copy Email` to paste the message elsewhere
+
+## Hipflat Notes
+
+Hipflat is now included as a browser-backed source. In practice, Hipflat often sits behind a Cloudflare challenge, so the adapter may need a verified Playwright profile instead of a fully anonymous browser session.
+
+If Hipflat is blocked, set a persistent profile and run headful once:
+
+```powershell
+$env:APARTMENT_AGENT_BROWSER_PROFILE_DIR="C:\\temp\\apartment-agent-browser"
+$env:APARTMENT_AGENT_BROWSER_HEADFUL="1"
+python -m apartment_agent run --criteria config/criteria.json --sources config/sources.json
+```
+
+The same environment variables also apply when running the desktop app.
 
 ## Daily Runs
 

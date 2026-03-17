@@ -48,5 +48,15 @@
     "enabled": true,
     "capture_screenshot_on_conflict": false,
     "notes": "Known smaller-unit benchmark listing"
+  },
+  {
+    "name": "Hipflat",
+    "kind": "zone",
+    "url": "https://www.hipflat.com/condo-for-rent/bangkok/chatuchak/two-bed",
+    "page_limit": 1,
+    "detail_fetch_limit": 6,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "Browser-backed source. Hipflat may require a verified Playwright profile because of Cloudflare."
   }
 ]
