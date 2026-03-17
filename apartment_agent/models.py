@@ -94,6 +94,10 @@ class Listing:
     dedupe_key: str = ""
     similarity_key: str = ""
     duplicate_of: str | None = None
+    viewed: bool = False
+    viewed_at: str | None = None
+    emailed: bool = False
+    emailed_at: str | None = None
     contacted: bool = False
     contacted_at: str | None = None
     not_interested: bool = False

@@ -22,11 +22,15 @@ The current implementation is centered on `PropertyHub`, because its pages expos
 - Scores listings against user-defined criteria such as budget, size, bedroom count, target neighborhoods, and walkability cues
 - Deduplicates repeated listings in SQLite
 - Generates first-contact outreach emails for real-estate agents
-- Opens Gmail with the draft prefilled, or copies the draft to the clipboard
+- Opens Gmail with the draft prefilled, copies the draft to the clipboard, or sends the email directly from the app through SMTP
+- Includes a desktop `Settings` page for managing the direct-send SMTP account in a local `.env` file
+- Lets you save a missing agent email manually or pull candidate emails from the built-in research flow
 - Lets you mark listings as `contacted` or `not contacted`
+- Tracks whether a listing has been `viewed` or `emailed`, separately from general contact state
 - Lets you hide listings as `not interested` and keep them hidden across future runs
-- Shows listing date, contact state, and hidden-state directly in the desktop UI
+- Shows listing date, viewed/emailed/contact state, and hidden-state directly in the desktop UI
 - Sorts results by best match, newest, oldest, and price
+- Lets you click table headers to sort directly in the results grid
 - Writes JSON and Markdown reports for each collection run
 - Optionally captures screenshots with Playwright for manual review
 
@@ -141,6 +145,7 @@ Implemented:
 - SQLite persistence
 - results viewer desktop app
 - Gmail draft opening
+- direct SMTP sending from the desktop app
 - contacted tracking
 - persistent not-interested hiding
 - listing date display
@@ -154,7 +159,6 @@ Not implemented yet:
 - RentHub adapter
 - PropertyScout adapter
 - OCR / vision extraction from screenshots
-- automatic email sending
 - multi-user or hosted deployment
 
 ## Project Structure
@@ -228,8 +232,40 @@ Inside the app you can:
 - click `Hide Listing` once you know a listing is not worth reviewing again
 - click `Restore Listing` to bring a hidden listing back into the active set
 - click `Regenerate Draft` to rebuild the latest email from the current template
+- click `Send Email` to send directly from the app when SMTP is configured
 - click `Open Gmail Draft` to open a browser tab with the draft prefilled
+- clicking the Gmail action marks the listing as `emailed`
 - click `Copy Email` to paste the message elsewhere
+- open the `Settings` tab to manage the SMTP account used for direct sending
+- use `Test SMTP` in the `Settings` tab to verify login before sending live email
+- use `Find / Set Email` in the `Email Draft` tab when the listing is missing an agent email
+
+## Direct Email Sending
+
+The desktop app can send an email directly without opening Gmail.
+
+You can either edit `.env` directly or use the `Settings` tab in the app. The repo includes [.env.example](.env.example), and the app uses a local `.env` file that is ignored by git.
+
+Default Gmail profile:
+
+```powershell
+$env:APARTMENT_AGENT_SMTP_HOST="smtp.gmail.com"
+$env:APARTMENT_AGENT_SMTP_PORT="587"
+$env:APARTMENT_AGENT_SMTP_USERNAME="pzgambo@gmail.com"
+$env:APARTMENT_AGENT_SMTP_PASSWORD="your-app-password"
+$env:APARTMENT_AGENT_SMTP_FROM="pzgambo@gmail.com"
+$env:APARTMENT_AGENT_SMTP_FROM_NAME="Patrick"
+$env:APARTMENT_AGENT_SMTP_REPLY_TO="pzgambo@gmail.com"
+$env:APARTMENT_AGENT_SMTP_USE_TLS="1"
+```
+
+For Gmail, use an app password, not your normal Google account password.
+
+Once configured, selecting a listing and clicking `Send Email` will:
+
+- send the current draft to the listing agent's stored email address
+- save that sent draft to SQLite
+- mark the listing as `contacted`
 
 ## Hipflat Notes
 
@@ -306,7 +342,7 @@ This makes it possible to filter for listings you still need to contact and avoi
 - Older stored listings may not have a listing date until a fresh search refreshes them.
 - Some sites redirect or expose inconsistent fields, so future adapters will still need site-specific handling.
 - This is a local desktop tool, not a hosted SaaS product.
-- Email sending is not automatic; the current flow is review-first and manual-send by design.
+- Email sending is still review-first. The app can send directly, but only when you explicitly click `Send Email`.
 
 ## License
 

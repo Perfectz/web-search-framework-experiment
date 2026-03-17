@@ -148,7 +148,7 @@ def _finalize_run(
 def _dedupe_within_run(listings: list[Listing]) -> list[Listing]:
     best_by_key: dict[str, Listing] = {}
     for listing in listings:
-        key = listing.dedupe_key or listing.url
+        key = _dedupe_bucket_key(listing)
         current = best_by_key.get(key)
         if current is None or _richness(listing) > _richness(current):
             best_by_key[key] = listing
@@ -163,3 +163,19 @@ def _richness(listing: Listing) -> int:
     if listing.contact_phone or listing.contact_email:
         score += 5
     return score
+
+
+def _dedupe_bucket_key(listing: Listing) -> str:
+    if listing.similarity_key:
+        return f"sim:{listing.similarity_key}"
+    project = _slug_text(listing.project_name or listing.title)
+    beds = str(listing.bedrooms or "na")
+    size = str(int(round(listing.size_sqm))) if listing.size_sqm is not None else "na"
+    price = str(int(round((listing.price_baht or 0) / 1000))) if listing.price_baht is not None else "na"
+    floor = _slug_text(listing.floor)
+    return f"fallback:{project}|{beds}|{size}|{price}|{floor}"
+
+
+def _slug_text(value: str | None) -> str:
+    source = (value or "").lower().strip()
+    return "".join(character if character.isalnum() else "-" for character in source).strip("-")
