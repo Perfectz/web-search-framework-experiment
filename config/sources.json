@@ -1,0 +1,52 @@
+[
+  {
+    "name": "PropertyHub",
+    "kind": "zone",
+    "url": "https://propertyhub.in.th/en/condo-for-rent/mrt-chatuchak-park",
+    "page_limit": 1,
+    "detail_fetch_limit": 8,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "Primary live zone source"
+  },
+  {
+    "name": "PropertyHub",
+    "kind": "project",
+    "url": "https://propertyhub.in.th/en/condo-for-rent/project-m-jatujak",
+    "page_limit": 1,
+    "detail_fetch_limit": 8,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "High-priority park-adjacent project"
+  },
+  {
+    "name": "PropertyHub",
+    "kind": "project",
+    "url": "https://propertyhub.in.th/en/condo-for-rent/project-equinox",
+    "page_limit": 1,
+    "detail_fetch_limit": 8,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "Value project with many 2BR listings"
+  },
+  {
+    "name": "PropertyHub",
+    "kind": "listing",
+    "url": "https://propertyhub.in.th/en/listings/lth13599-condo-for-rent-harmony-living-phahonyothin-11-100-sqm-2-beds-2-baths-45-000-thb-month---5586066",
+    "page_limit": 1,
+    "detail_fetch_limit": 1,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "Known large-unit lead with direct contact details"
+  },
+  {
+    "name": "PropertyHub",
+    "kind": "listing",
+    "url": "https://propertyhub.in.th/en/listings/for-rent-equinox-condo-beautifully-decorated-room-fully-furnished-chatuchak-park-view-lh-rw006405---5114105",
+    "page_limit": 1,
+    "detail_fetch_limit": 1,
+    "enabled": true,
+    "capture_screenshot_on_conflict": false,
+    "notes": "Known smaller-unit benchmark listing"
+  }
+]

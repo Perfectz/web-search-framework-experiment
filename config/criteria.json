@@ -1,0 +1,46 @@
+{
+  "max_rent_baht": 55000,
+  "min_bedrooms": 2,
+  "min_size_sqm": 80,
+  "preferred_furnished": true,
+  "pet_friendly_required": null,
+  "primary_neighborhoods": [
+    "Chatuchak",
+    "Jom Phon",
+    "Lat Yao",
+    "Phaya Thai",
+    "Ari",
+    "Saphan Khwai",
+    "Mo Chit",
+    "Kamphaeng Phet",
+    "Ratchayothin"
+  ],
+  "backup_neighborhoods": [
+    "Ha Yaek Lat Phrao"
+  ],
+  "transit_anchors": [
+    "BTS Mo Chit",
+    "MRT Chatuchak Park",
+    "MRT Kamphaeng Phet",
+    "BTS Saphan Khwai",
+    "BTS Ratchayothin",
+    "BTS Ari"
+  ],
+  "park_keywords": [
+    "Chatuchak Park",
+    "park view",
+    "park-adjacent",
+    "easy walking",
+    "walk to park",
+    "garden"
+  ],
+  "size_tolerance_sqm": 10,
+  "alert_score_threshold": 75,
+  "watch_score_threshold": 55,
+  "sender_name": "Patrick",
+  "timezone": "Asia/Bangkok",
+  "outreach_context": "I'm looking for this apartment on behalf of my Thai girlfriend, who recently had a stroke.",
+  "outreach_requirements": "The apartment would be for her and a live-in nurse, so I'm especially focused on accessibility, ease of movement, and whether the building and location are practical for simple daily walks.",
+  "viewing_window_start": "April 4, 2026",
+  "viewing_window_end": "April 26, 2026"
+}

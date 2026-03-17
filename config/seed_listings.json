@@ -1,0 +1,143 @@
+[
+  {
+    "title": "2-bedroom Condo At Sarin Place Condominium",
+    "url": "https://www.ddproperty.com/en/property/sarin-place-for-rent-500192307",
+    "site_name": "DDproperty",
+    "listing_id": "500192307",
+    "project_name": "Sarin Place",
+    "price_baht": 39900,
+    "location_text": "Ratchadaphisek, Lat Yao, Chatuchak, Bangkok",
+    "neighborhood": "Lat Yao / Ratchayothin side",
+    "nearest_bts_mrt": "BTS Ratchayothin",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "size_sqm": 150,
+    "furnished": true,
+    "amenities": [
+      "Balcony",
+      "Microwave",
+      "Refrigerator",
+      "TV",
+      "Gym",
+      "Garden",
+      "Pool",
+      "Sauna",
+      "24-hours security",
+      "Parking"
+    ],
+    "english_summary": "Large fully furnished 2BR in Sarin Place; excellent size for budget but not ideal for Chatuchak Park walking access.",
+    "listing_source_status": "detail_ok",
+    "match_reasons": [
+      "Excellent size and price"
+    ],
+    "red_flags": [
+      "Not in the core Mo Chit / Chatuchak Park pocket"
+    ]
+  },
+  {
+    "title": "2-BR Condo at M Jatujak near BTS Saphan Khwai (ID 2602964)",
+    "url": "https://assets.propertyhub.in.th/en/listings/2-br-condo-at-m-jatujak-near-bts-saphan-khwai-id-2602964---5759142",
+    "site_name": "PropertyHub",
+    "listing_id": "5759142",
+    "project_name": "M Jatujak",
+    "price_baht": 45000,
+    "location_text": "Lat Yao / Chatuchak, Bangkok",
+    "neighborhood": "M Jatujak / Chatuchak Park area",
+    "nearest_bts_mrt": "BTS Saphan Khwai / BTS Mo Chit / MRT Chatuchak Park / MRT Kamphaeng Phet",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "size_sqm": 80,
+    "furnished": true,
+    "english_summary": "Best-fit lead for daily park walking plus decent space under the 55k budget.",
+    "listing_source_status": "summary_only",
+    "red_flags": [
+      "Detail URL unstable in text extraction",
+      "Some data came from snippet rather than stable detail page"
+    ]
+  },
+  {
+    "title": "For rent Equinox Condo, beautifully decorated room, fully furnished, Chatuchak Park view, LH-RW006405",
+    "url": "https://propertyhub.in.th/en/listings/for-rent-equinox-condo-beautifully-decorated-room-fully-furnished-chatuchak-park-view-lh-rw006405---5114105",
+    "site_name": "PropertyHub",
+    "listing_id": "5114105",
+    "project_name": "Equinox",
+    "price_baht": 36000,
+    "location_text": "Equinox Chatuchak Bangkok",
+    "neighborhood": "Chatuchak",
+    "nearest_bts_mrt": "MRT Chatuchak + BTS Mo Chit",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "size_sqm": 63,
+    "furnished": true,
+    "pet_friendly": false,
+    "room_amenities": [
+      "TV",
+      "Air conditioner",
+      "Fridge",
+      "Microwave",
+      "Washing machine"
+    ],
+    "project_facilities": [
+      "Swimming Pool",
+      "Fitness",
+      "Shuttle Service",
+      "Park / BBQ Areas",
+      "Kids Playground"
+    ],
+    "available_date": "2025-06-14",
+    "contact_name": "Living Home and Condo",
+    "contact_phone": "0647874793",
+    "contact_email": "living.homeandcondo@gmail.com",
+    "contact_line": "@Livinghomecondo",
+    "contact_whatsapp": "66647874793",
+    "english_summary": "Fully furnished Equinox unit with clear detail page and transit access; strong value but smaller than preferred.",
+    "listing_source_status": "detail_ok",
+    "red_flags": [
+      "63 sqm is below target size"
+    ]
+  },
+  {
+    "title": "for rent condo equinox phahol-vibha size 80 sq.m 2bed price 31,000/month",
+    "url": "https://assets2.propertyhub.in.th/en/listings/for-rent-condo-equinox-phahol-vibha-size-80-sq-m-2bed-price-31-000-month---5684916",
+    "site_name": "PropertyHub",
+    "listing_id": "5684916",
+    "project_name": "Equinox",
+    "price_baht": 31000,
+    "location_text": "Chomphon / Chatuchak / Bangkok",
+    "neighborhood": "Equinox / Chatuchak corridor",
+    "bedrooms": 2,
+    "size_sqm": 80,
+    "english_summary": "Potential best-value 80 sqm 2BR lead in Equinox.",
+    "listing_source_status": "summary_only",
+    "red_flags": [
+      "PropertyHub summary parser showed erroneous size value",
+      "Needs browser verification before outreach"
+    ]
+  },
+  {
+    "title": "LTH13599 – Condo for Rent | Harmony Living Phahonyothin 11 | 100 sqm | 2 Beds 2 Baths | 45,000 THB/Month",
+    "url": "https://propertyhub.in.th/en/listings/lth13599-condo-for-rent-harmony-living-phahonyothin-11-100-sqm-2-beds-2-baths-45-000-thb-month---5586066",
+    "site_name": "PropertyHub",
+    "listing_id": "5586066",
+    "project_name": "Harmony Living Pahonyothin 11",
+    "price_baht": 45000,
+    "location_text": "Harmony Living Pahonyothin 11, Phaya Thai, Bangkok",
+    "neighborhood": "Phaya Thai / Ari / Saphan Khwai",
+    "nearest_bts_mrt": "BTS Ari, BTS Saphan Khwai",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "size_sqm": 100,
+    "furnished": true,
+    "pet_friendly": false,
+    "contact_name": "KC",
+    "contact_company": "Liberal Estate (Thailand)",
+    "contact_phone": "063-369-5994 / 096-945-8392",
+    "contact_email": "kc_let@liberalestateth.com",
+    "thai_description": "คอนโดให้เช่า ฮาร์โมนี่ ลิฟวิ่ง พหลฯ 11",
+    "english_summary": "Large furnished 2BR with direct email and phone contact; good size under budget.",
+    "listing_source_status": "detail_ok",
+    "red_flags": [
+      "Walkability to large park is weaker than M Jatujak"
+    ]
+  }
+]
