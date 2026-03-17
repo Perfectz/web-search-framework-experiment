@@ -1,4 +1,6 @@
-# Apartment Agent
+# Web Search Framework Experiment
+
+Apartment Agent prototype for Bangkok apartment search automation.
 
 Desktop apartment-search agent for Bangkok rentals, built to monitor Thai listing sites, score results against custom accessibility-focused criteria, and generate agent outreach emails that can be copied or opened directly in Gmail.
 
